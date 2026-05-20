@@ -8,7 +8,7 @@ export function Header() {
     <header className="header">
       <div className="header-content">
         <div className="logo">
-          <h2>GymCross</h2>
+          <h2 className="text-white">GymCross</h2>
         </div>
         <nav className="nav">
           <button onClick={() => handleScroll("hero")}>Inicio</button>
@@ -16,7 +16,7 @@ export function Header() {
           <button onClick={() => handleScroll("benefits")}>Beneficios</button>
           <button onClick={() => handleScroll("features")}>Demo</button>
           <button onClick={() => handleScroll("contact")}>Contacto</button>
-          <button className="btn-primary">Comenzar</button>
+          <button className="btn-pri">Comenzar</button>
         </nav>
       </div>
     </header>

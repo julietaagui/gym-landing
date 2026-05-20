@@ -95,7 +95,7 @@ export function Contact() {
               />
             </div>
 
-            <button type="submit" className="btn-primary" disabled={loading}>
+            <button type="submit" className="btn-pri" disabled={loading}>
               {loading ? "Enviando..." : "Enviar solicitud"}
             </button>
           </form>
