@@ -1,0 +1,24 @@
+:root {
+  --primary-01: #0C1E30;
+  --primary-02: #29476B;
+  --primary-03: #557397;
+  --primary-04: #C9D6ED;
+  --primary-06: #E2EBF5;
+  --text-light: #ffffff;
+  --border-radius: 32px;
+  --transition: all 0.3s ease;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--primary-01);
+  color: var(--primary-01);
+  line-height: 1.6;
+}
