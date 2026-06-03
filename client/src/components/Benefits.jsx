@@ -1,8 +1,4 @@
-import { useState } from "react";
-
 export function Benefits() {
-  const [activeAccordion, setActiveAccordion] = useState(0);
-
   const benefits = [
     {
       id: 0,
@@ -46,24 +42,52 @@ export function Benefits() {
     <section className="benefits-section" id="benefits">
       <div className="benefits-container">
         <h2>Beneficios</h2>
-        <div className="benefits-accordion">
+
+        <div
+          className="accordion benefits-accordion"
+          id="benefitsAccordion"
+        >
           {benefits.map((benefit, index) => (
-            <div key={benefit.id} className="accordion-item">
-              <button
-                className={`accordion-header ${activeAccordion === index ? "active" : ""}`}
-                onClick={() => setActiveAccordion(index)}
+            <div
+              className="accordion-item benefit-item"
+              key={benefit.id}
+            >
+              <h2
+                className="accordion-header"
+                id={`heading-${benefit.id}`}
               >
-                <span className="accordion-number">
-                  {String(benefit.id + 1).padStart(2, "0")}
-                </span>
-                <span className="accordion-title">{benefit.title}</span>
-                <span className="accordion-icon">+</span>
-              </button>
-              {activeAccordion === index && (
-                <div className="accordion-content">
-                  <p>{benefit.description}</p>
+                <button
+                  className={`accordion-button ${
+                    index !== 0 ? "collapsed" : ""
+                  }`}
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target={`#collapse-${benefit.id}`}
+                  aria-expanded={index === 0}
+                  aria-controls={`collapse-${benefit.id}`}
+                >
+                  <span className="accordion-number">
+                    {String(benefit.id + 1).padStart(2, "0")}
+                  </span>
+
+                  <span className="accordion-title">
+                    {benefit.title}
+                  </span>
+                </button>
+              </h2>
+
+              <div
+                id={`collapse-${benefit.id}`}
+                className={`accordion-collapse collapse ${
+                  index === 0 ? "show" : ""
+                }`}
+                aria-labelledby={`heading-${benefit.id}`}
+                data-bs-parent="#benefitsAccordion"
+              >
+                <div className="accordion-body">
+                  {benefit.description}
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>
