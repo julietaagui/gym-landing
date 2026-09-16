@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { sendContactForm } from "../api/contactApi";
-import img1 from "../assets/img1.png";
+import img1 from "../assets/contact.png";
 
 export function Contact() {
   const [name, setName] = useState("");
@@ -95,7 +95,7 @@ export function Contact() {
               />
             </div>
 
-            <button type="submit" className="btn-pri" disabled={loading}>
+            <button type="submit" className="btn-submit" disabled={loading}>
               {loading ? "Enviando..." : "Enviar solicitud"}
             </button>
           </form>

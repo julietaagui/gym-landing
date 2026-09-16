@@ -167,6 +167,18 @@
   font-size: 0.8rem;
 }
 
+.btn-submit {
+  background: var(--primary-04);
+  color: var(--primary-01);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.95rem;
+}
+
 .hero-benefits {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -694,11 +706,7 @@
 
 .contact-section {
   padding: 5rem 2rem;
-  background: linear-gradient(
-    135deg,
-    var(--primary-01) 0%,
-    var(--primary-03) 100%
-  );
+  background: var(--primary-01) ;
 }
 
 .contact-container {
@@ -750,9 +758,9 @@
 .form-group input,
 .form-group textarea {
   padding: 1rem;
-  border: 2px solid rgba(0, 212, 255, 0.3);
+  border: 2px solid var(--primary-04);
   border-radius: var(--border-radius);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--primary-01);
   color: var(--text-light);
   font-size: 0.95rem;
   transition: var(--transition);
@@ -761,7 +769,7 @@
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--primary-04);
 }
 
 .form-group input:focus,
@@ -792,7 +800,7 @@
 
 .footer {
   background-color: var(--primary-01);
-  border-top: 2px solid rgba(0, 212, 255, 0.2);
+  border-top: 1px solid var(--primary-04);
   padding: 3rem 2rem 1rem;
 }
 
@@ -847,8 +855,8 @@
 .footer-bottom {
   text-align: center;
   padding-top: 2rem;
-  border-top: 1px solid rgba(0, 212, 255, 0.2);
-  color: rgba(255, 255, 255, 0.6);
+  border-top: 1px solid var(--primary-04);
+  color: var(--text-light);
   font-size: 0.85rem;
 }
 
