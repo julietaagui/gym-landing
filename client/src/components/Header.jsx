@@ -1,7 +1,17 @@
 export function Header() {
   const handleScroll = (id) => {
     const element = document.getElementById(id);
-    element?.scrollIntoView({ behavior: "smooth" });
+
+    if (!element) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    element.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      block: "start",
+    });
   };
 
   return (

@@ -14,7 +14,20 @@
   box-sizing: border-box;
 }
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+  scroll-padding-top: 5rem;
+}
+
+@media (max-width: 768px) {
+  html {
+    scroll-padding-top: 11rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 body {
   font-family: "Poppins", sans-serif;
