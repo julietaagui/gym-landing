@@ -977,6 +977,11 @@
   border: none;
 }
 
+.img-features-paired {
+  width: 48%;
+  height: 82%;
+}
+
 .img-features:hover {
   transform: scale(1.02);
 }

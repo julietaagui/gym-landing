@@ -5,8 +5,11 @@ import cashbox from "../assets/cashbox.png";
 import metrics from "../assets/metrics.png";
 import exercise from "../assets/exercise.png";
 import userAppointment from "../assets/user-appointment.png";
+import userHome from "../assets/user-home.png";
 import userProfile from "../assets/user-profile.png";
+import userProfile2 from "../assets/user-profile2.png";
 import userPayments from "../assets/user-payments.png";
+import userPayments2 from "../assets/user-payments2.png";
 
 export function Features() {
   const topTabs = [
@@ -50,6 +53,11 @@ export function Features() {
 
   const mobileSideTabs = [
     {
+      id: "home",
+      title: "Inicio",
+      image: userHome,
+    },
+    {
       id: "appointment",
       title: "Turnos",
       image: userAppointment,
@@ -57,12 +65,12 @@ export function Features() {
     {
       id: "profile",
       title: "Perfil de usuario",
-      image: userProfile,
+      images: [userProfile, userProfile2],
     },
     {
       id: "payments",
       title: "Pagos",
-      image: userPayments,
+      images: [userPayments, userPayments2],
     },
   ];
 
@@ -124,13 +132,22 @@ export function Features() {
 
                 <div className="features-main-layout">
                   <div className="mockup-placeholder">
-                    <img
-                      src={activeTab.image}
-                      alt={activeTab.title}
-                      className={`img-features ${
-                        isFading ? "fade-out" : "fade-in"
-                      }`}
-                    />
+                    {(activeTab.images ?? [activeTab.image]).map(
+                      (image, index) => (
+                        <img
+                          key={`${activeTab.id}-${index}`}
+                          src={image}
+                          alt={
+                            activeTab.images
+                              ? `${activeTab.title} ${index + 1}`
+                              : activeTab.title
+                          }
+                          className={`img-features ${
+                            activeTab.images ? "img-features-paired" : ""
+                          } ${isFading ? "fade-out" : "fade-in"}`}
+                        />
+                      ),
+                    )}
                   </div>
 
                   <div className="feature-tabs">
