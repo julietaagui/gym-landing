@@ -131,7 +131,13 @@ export function Features() {
                 </div>
 
                 <div className="features-main-layout">
-                  <div className="mockup-placeholder">
+                  <div
+                    className={`mockup-placeholder ${
+                      selectedTopTab === "mobile" ? "mockup-mobile" : ""
+                    } ${
+                      activeTab.id === "users" ? "mockup-users" : ""
+                    } ${activeTab.id === "profile" ? "mockup-profile" : ""}`}
+                  >
                     {(activeTab.images ?? [activeTab.image]).map(
                       (image, index) => (
                         <img

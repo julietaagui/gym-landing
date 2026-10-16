@@ -1,20 +1,48 @@
-# ⚡ GUÍA RÁPIDA - GYMCROSS LANDING
+# Guía rápida - GymCross Landing
 
 ## 🎯 Start Rápido
 
 **Abrir 2 terminales:**
 
-```bash
-# Terminal 1 - Backend
-cd c:\Dev\gym-landing\server
-npm run dev
-→ http://localhost:3000
+En una terminal, inicia el backend desde `server`:
 
-# Terminal 2 - Frontend  
-cd c:\Dev\gym-landing\client
+```bash
+cd C:\Dev\Gymcross\gym-landing\server
+npm install
 npm run dev
-→ http://localhost:5174
 ```
+
+En otra terminal, inicia el frontend desde `client`:
+
+```bash
+cd C:\Dev\Gymcross\gym-landing\client
+npm install
+npm run dev
+```
+
+Vite muestra la URL local en la terminal, normalmente `http://localhost:5173`.
+
+## 📧 Configurar el envío de correos
+
+1. Copia `server/.env.example` a `server/.env`.
+2. Completa `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` y `CONTACT_TO` con los datos de tu proveedor de correo.
+3. En Gmail usa una contraseña de aplicación para `SMTP_PASS`; no uses la contraseña normal de la cuenta.
+4. Configura `FRONTEND_URL` con el origen del frontend. Para varios dominios, sepáralos con comas.
+5. En `client/.env` configura `VITE_API_URL=http://localhost:3000` para desarrollo. En producción usa la URL pública del backend.
+6. Reinicia ambos servidores después de cambiar variables de entorno.
+
+El endpoint `GET http://localhost:3000/api/health` informa si el backend arrancó y si las credenciales SMTP están configuradas. El formulario envía una notificación al correo indicado en `CONTACT_TO`.
+
+## 🚀 Deploy
+
+La configuración lista para publicar es Vercel (`client/`) + Render (`server/`):
+
+1. Conecta el repositorio en Vercel y selecciona `client` como directorio raíz.
+2. En Render, crea un Blueprint usando el `render.yaml` de la raíz.
+3. Configura en Render `FRONTEND_URL` con el dominio de Vercel y agrega los valores SMTP en sus variables privadas.
+4. Agrega `VITE_API_URL` en Vercel con el dominio de la API de Render y vuelve a desplegar el frontend.
+
+Render bloquea SMTP saliente en sus servicios gratuitos. Gmail SMTP necesita un plan pago de Render; para usar un servicio gratuito, hay que integrar un proveedor de correo con API HTTPS.
 
 ---
 
@@ -72,16 +100,6 @@ const benefits = [
 ---
 
 ## 🧰 Tareas útiles
-
-### Ver todos los contactos en terminal
-```bash
-curl http://localhost:3000/api/contacts
-```
-
-### Ver un contacto específico (reemplazar 123 por ID)
-```bash
-curl http://localhost:3000/api/contacts/123
-```
 
 ### Probar formulario con curl
 ```bash
@@ -150,10 +168,8 @@ Para cambiar: Edita variables en `App.css` líneas 1-8
 | Método | Ruta | Descripción |
 |--------|------|-------------|
 | GET | `/` | Health check |
-| POST | `/contact` | Enviar contacto |
-| GET | `/api/contacts` | Listar todos |
-| GET | `/api/contacts/:id` | Detalles |
-| PUT | `/api/contacts/:id` | Actualizar |
+| GET | `/api/health` | Estado de la API y configuración SMTP |
+| POST | `/contact` | Enviar formulario de contacto por email |
 
 ---
 

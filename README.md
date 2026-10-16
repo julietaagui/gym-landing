@@ -13,11 +13,10 @@
 - Estilos responsive y modernos
 - Animaciones e interactividad
 
-✅ **Backend mejorado:**
-- API de contactos con validaciones
-- Almacenamiento en memoria
-- Endpoint para obtener contactos
-- Endpoint para actualizar estado
+✅ **Backend:**
+- API para recibir y validar el formulario de contacto
+- Notificación por email mediante SMTP configurable
+- Health check para comprobar el estado del servicio y SMTP
 
 ---
 
@@ -36,20 +35,11 @@
 3. **¿El sitio necesita un blog o sección de recursos?**
 
 ### Backend
-1. **¿Cómo quieres guardar los contactos?**
-   - Actualmente están en memoria (se pierden al reiniciar)
-   - ¿Necesitas una base de datos? (MongoDB, PostgreSQL, etc.)
-
-2. **¿Quieres enviar emails cuando se recibe un contacto?**
-   - Correo al administrador
-   - Confirmación al usuario
-   - ¿Qué servicio: Gmail, SendGrid, Resend?
-
-3. **¿Necesitas autenticación/admin panel?**
+1. **¿Necesitas autenticación/admin panel?**
    - Para ver y gestionar contactos
    - Para actualizar contenido de la landing
 
-4. **¿Hay validaciones adicionales que necesites?**
+2. **¿Hay validaciones adicionales que necesites?**
    - Verificar que el email no sea spam
    - Limitar intentos por IP
    - CAPTCHA
@@ -63,9 +53,6 @@
 
 2. **¿Cuál es el dominio final?**
    - Para configurar CORS y URLs correctamente
-
-3. **¿Qué planes de hosting/deploy tienes en mente?**
-   - Vercel, Netlify, etc.
 
 ---
 
@@ -89,15 +76,37 @@ Acceder en: `http://localhost:3000`
 
 ### Variables de entorno
 
-**Server (.env)**
+Usa `server/.env.example` como base para `server/.env` y completa los datos SMTP del proveedor de correo:
+
 ```
 PORT=3000
 FRONTEND_URL=http://localhost:5173
-# Próximamente:
-# EMAIL_SERVICE=gmail
-# EMAIL_USER=tu@email.com
-# EMAIL_PASSWORD=tu_contraseña
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=tu-cuenta@gmail.com
+SMTP_PASS=tu-contraseña-de-aplicación
+MAIL_FROM=tu-cuenta@gmail.com
+CONTACT_TO=destino@gmail.com
 ```
+
+Para Gmail, usa una contraseña de aplicación, no la contraseña normal. No publiques las credenciales. El frontend toma la URL del backend de `VITE_API_URL`; `client/.env.example` incluye el valor local.
+
+`GET /api/health` informa si el servidor está activo y si SMTP está configurado. `POST /contact` manda la solicitud a `CONTACT_TO`.
+
+---
+
+## 🚀 Preparar el deploy
+
+La configuración del repositorio usa **Vercel para el frontend** (`client/`) y **Render para la API** (`server/`).
+
+1. Importa el repositorio de GitHub en Vercel y configura `client` como **Root Directory**. El archivo `client/vercel.json` define instalación, build y salida.
+2. Obtén el dominio de producción de Vercel, por ejemplo `https://gymcross.vercel.app`.
+3. En Render, crea un Blueprint desde este repositorio usando `render.yaml`. Configura `FRONTEND_URL` con el dominio de Vercel y completa `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` y `CONTACT_TO` en el panel de Render; no guardes credenciales en GitHub.
+4. Copia el dominio público de la API de Render y agrégalo en Vercel como `VITE_API_URL`, por ejemplo `https://gymcross-api.onrender.com`. Vuelve a desplegar el frontend para que tome la variable.
+5. Comprueba `https://<api-render>/api/health`; debe responder con `emailStatus: "ready"` cuando el SMTP esté accesible.
+
+**Correo con Gmail:** los servicios gratuitos de Render bloquean el tráfico SMTP saliente en los puertos 25, 465 y 587. Para mantener Gmail SMTP, el backend necesita un plan de Render que permita esos puertos. Como alternativa, se puede cambiar el envío a una API HTTPS de correo. [Limitaciones del plan gratuito de Render](https://render.com/docs/free).
 
 ---
 
@@ -150,7 +159,7 @@ server/
 ## ✨ Próximas características sugeridas
 
 - [ ] Base de datos para contactos
-- [ ] Envío de emails
+- [x] Envío de emails por SMTP
 - [ ] Admin panel para ver contactos
 - [ ] Página de políticas/términos
 - [ ] Sección de precios
@@ -166,7 +175,6 @@ server/
 
 - [ ] El placeholder de Features necesita una imagen real
 - [ ] Implementar persistencia en base de datos
-- [ ] Agregar logística de emails
 - [ ] Implementar autenticación
 - [ ] Agregar loader global
 - [ ] Mejorar validaciones de formulario
