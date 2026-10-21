@@ -3,12 +3,15 @@ services:
     name: gymcross-api
     runtime: node
     rootDir: server
+    plan: 0.5c-512mb
     buildCommand: npm ci
     startCommand: npm start
-    healthCheckPath: /
+    healthCheckPath: /healthz
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: "24.21.0"
       - key: SMTP_HOST
         value: smtp.gmail.com
       - key: SMTP_PORT

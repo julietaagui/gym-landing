@@ -1,10 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
+const { rateLimit } = require("express-rate-limit");
 const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "../.env") });
 
 const app = express();
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
 
 const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
   .split(",")
@@ -30,6 +34,18 @@ app.use(
 );
 
 app.use(express.json({ limit: "20kb" }));
+
+const contactRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    error: "Se alcanzó el límite de envíos. Intenta nuevamente en unos minutos.",
+  },
+});
+
+app.use("/contact", contactRateLimit);
 
 function getEmailConfiguration() {
   const { SMTP_HOST, SMTP_USER, SMTP_PASS, CONTACT_TO } = process.env;
@@ -71,6 +87,10 @@ app.get("/", (req, res) => {
   res.json({ message: "Backend de GymCross funcionando correctamente" });
 });
 
+app.get("/healthz", (req, res) => {
+  res.json({ status: "ok" });
+});
+
 app.get("/api/health", async (req, res) => {
   let emailStatus = "not_configured";
 
@@ -84,15 +104,24 @@ app.get("/api/health", async (req, res) => {
     }
   }
 
-  res.json({
-    status: "ok",
+  const ready = emailStatus === "ready";
+  res.status(ready ? 200 : 503).json({
+    status: ready ? "ok" : "degraded",
     emailConfigured: Boolean(mailer),
     emailStatus,
   });
 });
 
 app.post("/contact", async (req, res) => {
-  const { name, email, phone, message = "" } = req.body || {};
+  const { name, email, phone, message = "", website = "" } = req.body || {};
+
+  // Honeypot field: ignore automated submissions without telling the bot.
+  if (typeof website === "string" && website.trim()) {
+    return res.status(200).json({
+      success: true,
+      message: "¡Mensaje enviado correctamente! Te contactaremos pronto.",
+    });
+  }
 
   if (
     typeof name !== "string" ||

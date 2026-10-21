@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { sendContactForm } from "../api/contactApi";
 import img1 from "../assets/contact.png";
+import "./Contact.css";
 
 export function Contact() {
   const [name, setName] = useState("");
@@ -24,7 +25,8 @@ export function Contact() {
     setLoading(true);
 
     try {
-      const response = await sendContactForm({ name, email, phone, message });
+      const website = event.currentTarget.elements.website?.value || "";
+      const response = await sendContactForm({ name, email, phone, message, website });
       setStatus(response.message || "¡Mensaje enviado correctamente!");
       setName("");
       setEmail("");
@@ -55,6 +57,17 @@ export function Contact() {
           <p>Déjanos tus datos y nos contactaremos para ofrecerte la mejor solución</p>
 
           <form className="contact-form" onSubmit={handleSubmit}>
+            <div className="contact-honeypot" aria-hidden="true">
+              <label htmlFor="contact-website">Sitio web</label>
+              <input
+                id="contact-website"
+                name="website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
+
             <div className="form-group">
               <input
                 type="text"

@@ -33,16 +33,19 @@ Vite muestra la URL local en la terminal, normalmente `http://localhost:5173`.
 
 El endpoint `GET http://localhost:3000/api/health` informa si el backend arrancó y si las credenciales SMTP están configuradas. El formulario envía una notificación al correo indicado en `CONTACT_TO`.
 
+El formulario limita a 5 envíos por IP cada 15 minutos y usa un campo trampa para bots. El contador está en memoria por instancia; si escalas el backend a varias instancias, cambia a un almacén compartido.
+
 ## 🚀 Deploy
 
 La configuración lista para publicar es Vercel (`client/`) + Render (`server/`):
 
 1. Conecta el repositorio en Vercel y selecciona `client` como directorio raíz.
-2. En Render, crea un Blueprint usando el `render.yaml` de la raíz.
+2. En Render, crea un Blueprint usando el `render.yaml` de la raíz. El archivo selecciona el plan pago `0.5c-512mb`; revisa el precio antes de crear el servicio.
 3. Configura en Render `FRONTEND_URL` con el dominio de Vercel y agrega los valores SMTP en sus variables privadas.
-4. Agrega `VITE_API_URL` en Vercel con el dominio de la API de Render y vuelve a desplegar el frontend.
+4. Agrega `VITE_API_URL` en Vercel con el dominio de la API de Render y vuelve a desplegar el frontend. El build falla si falta esta variable o apunta a localhost.
+5. Revisa `/healthz` para el estado del servidor y `/api/health` para comprobar que SMTP responda.
 
-Render bloquea SMTP saliente en sus servicios gratuitos. Gmail SMTP necesita un plan pago de Render; para usar un servicio gratuito, hay que integrar un proveedor de correo con API HTTPS.
+Render bloquea SMTP saliente en sus servicios gratuitos. El plan seleccionado en `render.yaml` permite mantener Gmail SMTP; los servicios gratis pueden dormirse y no son ideales para producción.
 
 ---
 
@@ -121,13 +124,13 @@ curl -X POST http://localhost:3000/contact \
 → Vite automáticamente usa 5174. No hay problema.
 
 **Error: CORS policy blocked**
-→ Backend se reinició. Espera 2 segundos y reintenta.
+→ Verifica que `FRONTEND_URL` en Render contenga exactamente el dominio del sitio publicado.
 
 **Error: Cannot find module**
 → Asegúrate de estar en el directorio correcto antes de `npm run dev`
 
 **El formulario no envía**
-→ Abre DevTools (F12) → Console → Verifica errores
+→ Comprueba `VITE_API_URL` en Vercel, `/api/health` en la API y las credenciales SMTP configuradas en Render.
 
 ---
 
@@ -196,7 +199,7 @@ APIs: client/src/api/
 ## 🚀 Próximos pasos
 
 - [ ] Agregar base de datos
-- [ ] Implementar envío de emails
+- [x] Implementar envío de emails
 - [ ] Crear admin panel
 - [ ] Deploy a producción
 - [ ] Más secciones (blog, precios, etc.)

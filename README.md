@@ -94,6 +94,8 @@ Para Gmail, usa una contraseña de aplicación, no la contraseña normal. No pub
 
 `GET /api/health` informa si el servidor está activo y si SMTP está configurado. `POST /contact` manda la solicitud a `CONTACT_TO`.
 
+El formulario limita a 5 envíos por IP cada 15 minutos e incluye un campo trampa para bots. El contador se guarda en memoria en cada instancia; si Render escala a varias instancias, configura un almacén compartido para aplicar el mismo límite en todas.
+
 ---
 
 ## 🚀 Preparar el deploy
@@ -102,11 +104,12 @@ La configuración del repositorio usa **Vercel para el frontend** (`client/`) y 
 
 1. Importa el repositorio de GitHub en Vercel y configura `client` como **Root Directory**. El archivo `client/vercel.json` define instalación, build y salida.
 2. Obtén el dominio de producción de Vercel, por ejemplo `https://gymcross.vercel.app`.
-3. En Render, crea un Blueprint desde este repositorio usando `render.yaml`. Configura `FRONTEND_URL` con el dominio de Vercel y completa `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` y `CONTACT_TO` en el panel de Render; no guardes credenciales en GitHub.
-4. Copia el dominio público de la API de Render y agrégalo en Vercel como `VITE_API_URL`, por ejemplo `https://gymcross-api.onrender.com`. Vuelve a desplegar el frontend para que tome la variable.
-5. Comprueba `https://<api-render>/api/health`; debe responder con `emailStatus: "ready"` cuando el SMTP esté accesible.
+3. En Render, crea un Blueprint desde este repositorio usando `render.yaml`. El Blueprint selecciona explícitamente el plan `0.5c-512mb`, que es pago. Revisa el precio en Render antes de crear el servicio.
+4. Configura `FRONTEND_URL` con el dominio de Vercel y completa `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` y `CONTACT_TO` en el panel de Render; no guardes credenciales en GitHub.
+5. Copia el dominio público de la API de Render y agrégalo en Vercel como `VITE_API_URL`, por ejemplo `https://gymcross-api.onrender.com`. La compilación de producción falla si falta esta URL o apunta a localhost.
+6. Comprueba `https://<api-render>/healthz` para el estado del servicio y `https://<api-render>/api/health` para la conectividad SMTP; este último debe responder con `emailStatus: "ready"`.
 
-**Correo con Gmail:** los servicios gratuitos de Render bloquean el tráfico SMTP saliente en los puertos 25, 465 y 587. Para mantener Gmail SMTP, el backend necesita un plan de Render que permita esos puertos. Como alternativa, se puede cambiar el envío a una API HTTPS de correo. [Limitaciones del plan gratuito de Render](https://render.com/docs/free).
+**Correo con Gmail:** los servicios gratuitos de Render bloquean el tráfico SMTP saliente en los puertos 25, 465 y 587. El plan pago del Blueprint permite usar SMTP. Los servicios de Render Free también se suspenden tras 15 minutos sin tráfico y pueden tardar en despertar; no son ideales para una landing de producción. [Limitaciones de Render Free](https://render.com/docs/free).
 
 ---
 
@@ -176,6 +179,7 @@ server/
 - [ ] El placeholder de Features necesita una imagen real
 - [ ] Implementar persistencia en base de datos
 - [ ] Implementar autenticación
+- [x] Limitar envíos del formulario y agregar campo trampa antispam
 - [ ] Agregar loader global
 - [ ] Mejorar validaciones de formulario
 
