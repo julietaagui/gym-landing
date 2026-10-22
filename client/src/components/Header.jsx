@@ -66,6 +66,15 @@ export function Header() {
           <button onClick={() => handleScroll("features")}>Funcionalidades</button>
           <button onClick={() => handleScroll("benefits")}>Beneficios</button>
           <button onClick={() => handleScroll("contact")}>Contacto</button>
+          <a
+            className="nav-tutorial"
+            href="https://tutorial-gymcross.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Ver cómo funciona
+          </a>
         </nav>
       </div>
     </header>

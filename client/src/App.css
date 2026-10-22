@@ -46,6 +46,25 @@
   color: var(--primary-04);
 }
 
+.nav .nav-tutorial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.25rem;
+  border-radius: var(--border-radius);
+  background: var(--primary-04);
+  color: var(--primary-01);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.nav .nav-tutorial:hover {
+  color: var(--primary-01);
+  transform: translateY(-2px);
+}
+
 .btn-pri {
   background: var(--primary-01);
   color: var(--primary-04);
@@ -816,14 +835,14 @@
 }
 
 .footer-container {
-  max-width: 1400px;
+  max-width: 1080px;
   margin: 0 auto;
 }
 
 .footer-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 5vw, 4rem);
   margin-bottom: 2rem;
 }
 
@@ -1525,6 +1544,20 @@
 
   .header-content > .nav button:hover {
     background: rgba(255, 255, 255, 0.1);
+  }
+
+  .header-content > .nav .nav-tutorial {
+    justify-content: center;
+    min-height: 48px;
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
+    color: var(--primary-01);
+    text-align: center;
+  }
+
+  .header-content > .nav .nav-tutorial:hover {
+    background: var(--primary-04);
+    color: var(--primary-01);
   }
 
   .header-content > .nav .btn-pri {

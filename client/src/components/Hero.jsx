@@ -17,14 +17,6 @@ export function Hero() {
               </p>
 
               <div className="hero-buttons">
-                <a
-                  className="btn-sec"
-                  href="https://tutorial-gymcross.vercel.app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Ver cómo funciona
-                </a>
                 <div className="hero-demo-buttons">
                   <a
                     className="btn-pri btn-large"
