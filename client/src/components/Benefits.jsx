@@ -2,39 +2,39 @@ export function Benefits() {
   const benefits = [
     {
       id: 0,
-      title: "Mejora ROI",
+      title: "Una operación conectada desde el inicio",
       description:
-        "Incrementa tus ingresos hasta 40% con una gestión eficiente de clientes y automatización de procesos",
+        "Organizá actividades, planes y grupos de turnos en un mismo flujo. Al reutilizar la información del gimnasio, preparás el sistema con más claridad y evitás cargar los mismos datos varias veces.",
     },
     {
       id: 1,
-      title: "Integración fácil",
+      title: "Altas de clientes más simples",
       description:
-        "Se integra perfectamente con tus sistemas existentes. Migración sin complicaciones en pocas horas.",
+        "Buscá por DNI, revisá si la persona ya existe y asociá un plan activo desde el alta. Dejá registrados el estado del pago y su vencimiento para tener la información a mano.",
     },
     {
       id: 2,
-      title: "Experiencia mejorada",
+      title: "Turnos y cupos organizados",
       description:
-        "Tus clientes disfrutarán de una experiencia moderna con app móvil, reservas online y seguimiento de progreso.",
+        "Definí grupos por actividad, días, horarios y capacidad. Consultá los turnos generados, su disponibilidad y su estado para administrar mejor la agenda de clases.",
     },
     {
       id: 3,
-      title: "Costos reducidos",
+      title: "Caja y pagos bajo control",
       description:
-        "Reduce gastos administrativos en 60% automatizando tareas repetitivas y eliminando procesos manuales.",
+        "Registrá la apertura con monto inicial y responsable, asociá cada cobro a un método de pago y mantené identificados los pagos pendientes. Al final del turno, revisá el resumen y cerrá la caja.",
     },
     {
       id: 4,
-      title: "Soporte 24/7",
+      title: "La ficha del cliente, en un solo lugar",
       description:
-        "Contamos con un equipo de soporte disponible las 24 horas para ayudarte con cualquier duda o problema.",
+        "Consultá desde el perfil los datos, planes, pagos y entrenamientos de cada cliente. También podés revisar y actualizar su estado desde el panel de usuarios.",
     },
     {
       id: 5,
-      title: "Seguridad",
+      title: "Entrenamientos mejor organizados",
       description:
-        "Tus datos y los de tus clientes están protegidos con encriptación de nivel empresarial y certificaciones de seguridad.",
+        "Prepará ejercicios, agrupá por músculos y armá entrenamientos con repeticiones o tiempo, series y duración. Sumá imágenes cuando ayuden a explicar una rutina.",
     },
   ];
 
