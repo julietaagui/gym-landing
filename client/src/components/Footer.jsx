@@ -15,9 +15,6 @@ export function Footer() {
               <h4>Producto</h4>
               <ul>
                 <li>
-                  <a href="#features">Características</a>
-                </li>
-                <li>
                   <a href="#benefits">Beneficios</a>
                 </li>
                 <li>
@@ -27,31 +24,10 @@ export function Footer() {
             </div>
 
             <div className="footer-section">
-              <h4>Compañía</h4>
-              <ul>
-                <li>
-                  <a href="#about">Sobre nosotros</a>
-                </li>
-                <li>
-                  <a href="#privacy">Privacidad</a>
-                </li>
-                <li>
-                  <a href="#terms">Términos</a>
-                </li>
-              </ul>
-            </div>
-
-            <div className="footer-section">
               <h4>Síguenos</h4>
               <ul>
                 <li>
-                  <a href="#twitter">Twitter</a>
-                </li>
-                <li>
                   <a href="#instagram">Instagram</a>
-                </li>
-                <li>
-                  <a href="#linkedin">LinkedIn</a>
                 </li>
               </ul>
             </div>

@@ -18,22 +18,6 @@ export function Hero() {
 
               <div className="hero-buttons">
                 <a
-                  className="btn-pri btn-large"
-                  href="https://gym-cross-admin-fe.vercel.app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Probar demo Administrador
-                </a>
-                <a
-                  className="btn-pri btn-large"
-                  href="https://gym-cross-app.vercel.app/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Probar demo Cliente
-                </a>
-                <a
                   className="btn-sec"
                   href="https://tutorial-gymcross.vercel.app"
                   target="_blank"
@@ -41,6 +25,24 @@ export function Hero() {
                 >
                   Ver cómo funciona
                 </a>
+                <div className="hero-demo-buttons">
+                  <a
+                    className="btn-pri btn-large"
+                    href="https://gym-cross-admin-fe.vercel.app"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Demo de Administrador
+                  </a>
+                  <a
+                    className="btn-pri btn-large"
+                    href="https://gym-cross-app.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Demo de Cliente
+                  </a>
+                </div>
               </div>
 
               <div className="hero-benefits">
