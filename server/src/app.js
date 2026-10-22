@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const nodemailer = require("nodemailer");
 const { rateLimit } = require("express-rate-limit");
 const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "../.env") });
@@ -47,41 +46,54 @@ const contactRateLimit = rateLimit({
 
 app.use("/contact", contactRateLimit);
 
+const RESEND_API_URL = "https://api.resend.com";
+const DEFAULT_EMAIL_FROM = "GymCross <onboarding@resend.dev>";
+
 function getEmailConfiguration() {
-  const { SMTP_HOST, SMTP_USER, SMTP_PASS, CONTACT_TO } = process.env;
-  const port = Number(process.env.SMTP_PORT || 587);
-  const from = process.env.MAIL_FROM || SMTP_USER;
+  const { RESEND_API_KEY, CONTACT_TO } = process.env;
+  const from = process.env.MAIL_FROM || DEFAULT_EMAIL_FROM;
 
-  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS || !CONTACT_TO || !from) {
-    return null;
-  }
-
-  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+  if (!RESEND_API_KEY || !CONTACT_TO || !from) {
     return null;
   }
 
   return {
-    host: SMTP_HOST,
-    port,
-    secure: process.env.SMTP_SECURE === "true" || port === 465,
-    auth: { user: SMTP_USER, pass: SMTP_PASS },
+    apiKey: RESEND_API_KEY,
     from,
     to: CONTACT_TO,
   };
 }
 
 const emailConfiguration = getEmailConfiguration();
-const mailer = emailConfiguration
-  ? nodemailer.createTransport({
-      host: emailConfiguration.host,
-      port: emailConfiguration.port,
-      secure: emailConfiguration.secure,
-      auth: emailConfiguration.auth,
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 20000,
-    })
-  : null;
+
+async function sendContactEmail({ from, to, replyTo, subject, text }) {
+  const response = await fetch(`${RESEND_API_URL}/emails`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${emailConfiguration.apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from,
+      to: [to],
+      reply_to: replyTo,
+      subject,
+      text,
+    }),
+    signal: AbortSignal.timeout(15000),
+  });
+
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const providerError = new Error(
+      result.message || `Resend API respondió con estado ${response.status}.`,
+    );
+    providerError.status = response.status;
+    throw providerError;
+  }
+
+  return result;
+}
 
 app.get("/", (req, res) => {
   res.json({ message: "Backend de GymCross funcionando correctamente" });
@@ -91,24 +103,13 @@ app.get("/healthz", (req, res) => {
   res.json({ status: "ok" });
 });
 
-app.get("/api/health", async (req, res) => {
-  let emailStatus = "not_configured";
-
-  if (mailer) {
-    try {
-      await mailer.verify();
-      emailStatus = "ready";
-    } catch (error) {
-      emailStatus = "unavailable";
-      console.error("No se pudo verificar la conexión SMTP:", error.message);
-    }
-  }
-
-  const ready = emailStatus === "ready";
-  res.status(ready ? 200 : 503).json({
-    status: ready ? "ok" : "degraded",
-    emailConfigured: Boolean(mailer),
-    emailStatus,
+app.get("/api/health", (req, res) => {
+  const configured = Boolean(emailConfiguration);
+  res.status(configured ? 200 : 503).json({
+    status: configured ? "ok" : "degraded",
+    emailConfigured: Boolean(emailConfiguration),
+    emailProvider: "resend",
+    emailStatus: configured ? "configured" : "not_configured",
   });
 });
 
@@ -178,7 +179,7 @@ app.post("/contact", async (req, res) => {
     });
   }
 
-  if (!mailer || !emailConfiguration) {
+  if (!emailConfiguration) {
     return res.status(503).json({
       error:
         "El envío de correos todavía no está configurado. Contacta al administrador del sitio.",
@@ -198,7 +199,7 @@ app.post("/contact", async (req, res) => {
   ];
 
   try {
-    await mailer.sendMail({
+    await sendContactEmail({
       from: emailConfiguration.from,
       to: emailConfiguration.to,
       replyTo: contact.email,
@@ -211,7 +212,10 @@ app.post("/contact", async (req, res) => {
       message: "¡Mensaje enviado correctamente! Te contactaremos pronto.",
     });
   } catch (error) {
-    console.error("No se pudo enviar el correo de contacto:", error);
+    console.error("No se pudo enviar el correo de contacto:", {
+      status: error.status,
+      message: error.message,
+    });
     return res.status(502).json({
       error:
         "No se pudo enviar el mensaje en este momento. Intenta nuevamente más tarde.",
@@ -244,9 +248,9 @@ if (require.main === module) {
     console.log(`Servidor GymCross disponible en http://localhost:${PORT}`);
     console.log(`CORS habilitado para: ${allowedOrigins.join(", ")}`);
     console.log(
-      mailer
-        ? `Envío SMTP configurado para ${emailConfiguration.to}`
-        : "Envío SMTP pendiente: configura SMTP_* y CONTACT_TO en server/.env",
+      emailConfiguration
+        ? `Envío por Resend configurado para ${emailConfiguration.to}`
+        : "Envío pendiente: configura RESEND_API_KEY y CONTACT_TO en server/.env",
     );
   });
 }

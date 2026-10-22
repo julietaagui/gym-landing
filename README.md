@@ -15,8 +15,8 @@
 
 ✅ **Backend:**
 - API para recibir y validar el formulario de contacto
-- Notificación por email mediante SMTP configurable
-- Health check para comprobar el estado del servicio y SMTP
+- Notificación por email mediante la API HTTPS de Resend
+- Health check para comprobar el estado del servicio y la API de correo
 
 ---
 
@@ -76,23 +76,19 @@ Acceder en: `http://localhost:3000`
 
 ### Variables de entorno
 
-Usa `server/.env.example` como base para `server/.env` y completa los datos SMTP del proveedor de correo:
+Usa `server/.env.example` como base para `server/.env` y completa las variables de Resend:
 
 ```
 PORT=3000
 FRONTEND_URL=http://localhost:5173
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=465
-SMTP_SECURE=true
-SMTP_USER=tu-cuenta@gmail.com
-SMTP_PASS=tu-contraseña-de-aplicación
-MAIL_FROM=tu-cuenta@gmail.com
+RESEND_API_KEY=re_tu_clave_de_api
+MAIL_FROM=GymCross <onboarding@resend.dev>
 CONTACT_TO=destino@gmail.com
 ```
 
-Para Gmail, usa una contraseña de aplicación, no la contraseña normal. No publiques las credenciales. El frontend toma la URL del backend de `VITE_API_URL`; `client/.env.example` incluye el valor local.
+La clave se crea en el panel de Resend y debe guardarse como secreto, nunca en GitHub. `onboarding@resend.dev` sirve para pruebas que llegan al email verificado de la cuenta Resend. Para enviar desde una dirección propia, verifica un dominio en Resend y configura `MAIL_FROM` con una dirección de ese dominio. El frontend toma la URL del backend de `VITE_API_URL`; `client/.env.example` incluye el valor local.
 
-`GET /api/health` informa si el servidor está activo y si SMTP está configurado. `POST /contact` manda la solicitud a `CONTACT_TO`.
+`GET /api/health` informa si el servidor está activo y si están definidas las variables necesarias para Resend. `POST /contact` manda la solicitud a `CONTACT_TO`; la validez de la clave y el remitente se confirma al enviar.
 
 El formulario limita a 5 envíos por IP cada 15 minutos e incluye un campo trampa para bots. El contador se guarda en memoria en cada instancia; si Render escala a varias instancias, configura un almacén compartido para aplicar el mismo límite en todas.
 
@@ -104,12 +100,12 @@ La configuración del repositorio usa **Vercel para el frontend** (`client/`) y 
 
 1. Importa el repositorio de GitHub en Vercel y configura `client` como **Root Directory**. El archivo `client/vercel.json` define instalación, build y salida.
 2. Obtén el dominio de producción de Vercel, por ejemplo `https://gymcross.vercel.app`.
-3. En Render, crea un Blueprint desde este repositorio usando `render.yaml`. El Blueprint selecciona explícitamente el plan `0.5c-512mb`, que es pago. Revisa el precio en Render antes de crear el servicio.
-4. Configura `FRONTEND_URL` con el dominio de Vercel y completa `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` y `CONTACT_TO` en el panel de Render; no guardes credenciales en GitHub.
+3. En Render, crea un Blueprint desde este repositorio usando `render.yaml`, o configura el servicio manualmente con `server/`, `npm ci` y `npm start`.
+4. Configura `FRONTEND_URL` con el dominio de Vercel y completa `RESEND_API_KEY`, `MAIL_FROM` y `CONTACT_TO` en el panel de Render; no guardes credenciales en GitHub.
 5. Copia el dominio público de la API de Render y agrégalo en Vercel como `VITE_API_URL`, por ejemplo `https://gymcross-api.onrender.com`. La compilación de producción falla si falta esta URL o apunta a localhost.
-6. Comprueba `https://<api-render>/healthz` para el estado del servicio y `https://<api-render>/api/health` para la conectividad SMTP; este último debe responder con `emailStatus: "ready"`.
+6. Comprueba `https://<api-render>/healthz` para el estado del servicio y `https://<api-render>/api/health` para confirmar la configuración; debe responder con `emailStatus: "configured"`. Envía un formulario de prueba para comprobar la clave y el remitente.
 
-**Correo con Gmail:** los servicios gratuitos de Render bloquean el tráfico SMTP saliente en los puertos 25, 465 y 587. El plan pago del Blueprint permite usar SMTP. Los servicios de Render Free también se suspenden tras 15 minutos sin tráfico y pueden tardar en despertar; no son ideales para una landing de producción. [Limitaciones de Render Free](https://render.com/docs/free).
+**Correo con Resend:** el backend usa la API HTTPS de Resend, así que no depende de los puertos SMTP bloqueados en Render Free. El servicio gratuito de Render puede dormir tras 15 minutos sin tráfico y tardar en despertar. El remitente de prueba `onboarding@resend.dev` solo permite enviar a la dirección verificada de la cuenta Resend; para otros destinatarios o un remitente propio, verifica un dominio. [Limitaciones de Render Free](https://render.com/docs/free) · [Enviar emails con Resend](https://resend.com/express).
 
 ---
 
@@ -162,7 +158,7 @@ server/
 ## ✨ Próximas características sugeridas
 
 - [ ] Base de datos para contactos
-- [x] Envío de emails por SMTP
+- [x] Envío de emails por API HTTPS
 - [ ] Admin panel para ver contactos
 - [ ] Página de políticas/términos
 - [ ] Sección de precios

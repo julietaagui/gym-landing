@@ -25,13 +25,14 @@ Vite muestra la URL local en la terminal, normalmente `http://localhost:5173`.
 ## 📧 Configurar el envío de correos
 
 1. Copia `server/.env.example` a `server/.env`.
-2. Completa `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` y `CONTACT_TO` con los datos de tu proveedor de correo.
-3. En Gmail usa una contraseña de aplicación para `SMTP_PASS`; no uses la contraseña normal de la cuenta.
-4. Configura `FRONTEND_URL` con el origen del frontend. Para varios dominios, sepáralos con comas.
-5. En `client/.env` configura `VITE_API_URL=http://localhost:3000` para desarrollo. En producción usa la URL pública del backend.
-6. Reinicia ambos servidores después de cambiar variables de entorno.
+2. Completa `RESEND_API_KEY`, `MAIL_FROM` y `CONTACT_TO`.
+3. Crea la API key en el panel de Resend y guárdala como secreto; no la publiques en el repositorio.
+4. Para pruebas, usa `GymCross <onboarding@resend.dev>` como remitente y configura `CONTACT_TO` con el email verificado de tu cuenta Resend. Para enviar desde tu propio dominio, verifica ese dominio en Resend y actualiza `MAIL_FROM`.
+5. Configura `FRONTEND_URL` con el origen del frontend. Para varios dominios, sepáralos con comas.
+6. En `client/.env` configura `VITE_API_URL=http://localhost:3000` para desarrollo. En producción usa la URL pública del backend.
+7. Reinicia ambos servidores después de cambiar variables de entorno.
 
-El endpoint `GET http://localhost:3000/api/health` informa si el backend arrancó y si las credenciales SMTP están configuradas. El formulario envía una notificación al correo indicado en `CONTACT_TO`.
+El endpoint `GET http://localhost:3000/api/health` informa si el backend arrancó y si están definidas las variables de Resend. La validez de la clave y el remitente se confirma al enviar el formulario, que manda una notificación a `CONTACT_TO`.
 
 El formulario limita a 5 envíos por IP cada 15 minutos y usa un campo trampa para bots. El contador está en memoria por instancia; si escalas el backend a varias instancias, cambia a un almacén compartido.
 
@@ -40,12 +41,12 @@ El formulario limita a 5 envíos por IP cada 15 minutos y usa un campo trampa pa
 La configuración lista para publicar es Vercel (`client/`) + Render (`server/`):
 
 1. Conecta el repositorio en Vercel y selecciona `client` como directorio raíz.
-2. En Render, crea un Blueprint usando el `render.yaml` de la raíz. El archivo selecciona el plan pago `0.5c-512mb`; revisa el precio antes de crear el servicio.
-3. Configura en Render `FRONTEND_URL` con el dominio de Vercel y agrega los valores SMTP en sus variables privadas.
+2. En Render, crea un Blueprint usando el `render.yaml` de la raíz, o configura el servicio manualmente con `server/`, `npm ci` y `npm start`.
+3. Configura en Render `FRONTEND_URL` con el dominio de Vercel y agrega `RESEND_API_KEY`, `MAIL_FROM` y `CONTACT_TO` como variables privadas.
 4. Agrega `VITE_API_URL` en Vercel con el dominio de la API de Render y vuelve a desplegar el frontend. El build falla si falta esta variable o apunta a localhost.
-5. Revisa `/healthz` para el estado del servidor y `/api/health` para comprobar que SMTP responda.
+5. Revisa `/healthz` para el estado del servidor y `/api/health` para confirmar que las variables de correo estén configuradas. Envía una consulta de prueba para comprobar la API key y el remitente.
 
-Render bloquea SMTP saliente en sus servicios gratuitos. El plan seleccionado en `render.yaml` permite mantener Gmail SMTP; los servicios gratis pueden dormirse y no son ideales para producción.
+El backend envía correo con la API HTTPS de Resend, compatible con la salida de red de Render Free. El servicio gratuito de Render puede dormirse tras 15 minutos sin tráfico. El remitente de prueba de Resend solo puede enviar a la dirección verificada de la cuenta; para enviar desde un dominio propio, verifica ese dominio en Resend.
 
 ---
 
@@ -130,7 +131,7 @@ curl -X POST http://localhost:3000/contact \
 → Asegúrate de estar en el directorio correcto antes de `npm run dev`
 
 **El formulario no envía**
-→ Comprueba `VITE_API_URL` en Vercel, `/api/health` en la API y las credenciales SMTP configuradas en Render.
+→ Comprueba `VITE_API_URL` en Vercel, `/api/health` en la API y `RESEND_API_KEY`, `MAIL_FROM` y `CONTACT_TO` en Render. Con `onboarding@resend.dev`, `CONTACT_TO` debe ser el email verificado de la cuenta Resend.
 
 ---
 
@@ -171,7 +172,7 @@ Para cambiar: Edita variables en `App.css` líneas 1-8
 | Método | Ruta | Descripción |
 |--------|------|-------------|
 | GET | `/` | Health check |
-| GET | `/api/health` | Estado de la API y configuración SMTP |
+| GET | `/api/health` | Estado de la API y configuración de Resend |
 | POST | `/contact` | Enviar formulario de contacto por email |
 
 ---
