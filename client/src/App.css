@@ -143,6 +143,14 @@
   flex-wrap: wrap;
 }
 
+.hero-buttons > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  text-decoration: none;
+}
+
 .btn-sec {
   background: var(--primary-04);
   color: var(--primary-01);
@@ -1241,7 +1249,7 @@
     gap: 0.75rem;
   }
 
-  .hero-buttons button {
+  .hero-buttons > a {
     min-height: 48px;
     justify-content: center;
   }

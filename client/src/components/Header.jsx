@@ -65,9 +65,7 @@ export function Header() {
           <button onClick={() => handleScroll("hero")}>Inicio</button>
           <button onClick={() => handleScroll("features")}>Funcionalidades</button>
           <button onClick={() => handleScroll("benefits")}>Beneficios</button>
-          <button onClick={() => handleScroll("features")}>Demo</button>
           <button onClick={() => handleScroll("contact")}>Contacto</button>
-          <button className="btn-pri" onClick={() => setIsMenuOpen(false)}>Comenzar</button>
         </nav>
       </div>
     </header>
