@@ -4,25 +4,21 @@ export function Problems() {
       id: 1,
       title: "Clientes desorganizados",
       description: "Sin un control claro de tus clientes",
-      icon: "bi bi-people",
     },
     {
       id: 2,
       title: "Horarios sin controlar",
       description: "Dificultad para manejar horarios y reservas",
-      icon: "bi bi-clock",
     },
     {
       id: 3,
       title: "Pagos desordenados",
       description: "Gestión manual y confusa de cobros",
-      icon: "bi bi-credit-card",
     },
     {
       id: 4,
       title: "Sin seguimiento claro",
       description: "No hay forma de evaluar el progreso",
-      icon: "bi bi-graph-up-arrow",
     },
   ];
 
@@ -39,10 +35,9 @@ export function Problems() {
               <div key={problem.id} className="problem-card">
                 <div className="problem-top">
                   <span className="problem-number">{problem.id}</span>
-                  <i className={`${problem.icon} problem-icon`}></i>
+                  <h3 className="text-start">{problem.title}</h3>
                 </div>
 
-                <h3 className="text-start">{problem.title}</h3>
                 <p className="text-start">{problem.description}</p>
               </div>
             ))}
