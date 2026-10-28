@@ -46,7 +46,7 @@ export function Header() {
             <i className={`bi ${isMenuOpen ? "bi-x-lg" : "bi-list"}`} aria-hidden="true" />
           </button>
           <div className="logo">
-            <h2 className="text-white">GymCross</h2>
+            <h2>GymCross</h2>
           </div>
         </div>
         {isMenuOpen && (

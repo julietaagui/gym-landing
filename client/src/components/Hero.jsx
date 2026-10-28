@@ -1,6 +1,10 @@
-import img1 from "../assets/img1.png";
-import img2 from "../assets/img2.png";
-import img3 from "../assets/img3.png";
+import workout from "../assets/hero-workout.png";
+import tennisBalls from "../assets/hero-tennis-balls.jpg";
+import tennis from "../assets/hero-tennis.jpg";
+import basketball from "../assets/hero-basketball.jpg";
+import swimming from "../assets/hero-swimming.jpg";
+import padel from "../assets/hero-padel.png";
+import track from "../assets/hero-track.png";
 
 export function Hero() {
   return (
@@ -55,19 +59,18 @@ export function Hero() {
                 </div>
               </div>
             </div>
-
-            <div className="hero-right-section">
-              <div className="hero-images-layout">
-                <div className="hero-big-image">
-                  <img src={img1} alt="Running" className="img-hero img-big" />
-                </div>
-                <div className="hero-small-images">
-                  <img src={img3} alt="Entrenamiento" className="img-hero img-small" />
-                  <img src={img2} alt="Pesas" className="img-hero img-small" />
-                </div>
-              </div>
-            </div>
           </div>
+        </div>
+      </div>
+      <div className="hero-right-section">
+        <div className="hero-images-layout">
+          <img src={workout} alt="Entrenamiento" className="img-hero hero-mosaic-workout" />
+          <img src={tennisBalls} alt="Pelotas de tenis" className="img-hero hero-mosaic-balls" />
+          <img src={tennis} alt="Tenista en la cancha" className="img-hero hero-mosaic-tennis" />
+          <img src={basketball} alt="Aro de básquet" className="img-hero hero-mosaic-basketball" />
+          <img src={swimming} alt="Natación" className="img-hero hero-mosaic-swimming" />
+          <img src={padel} alt="Cancha de pádel" className="img-hero hero-mosaic-padel" />
+          <img src={track} alt="Pista de atletismo" className="img-hero hero-mosaic-track" />
         </div>
       </div>
     </section>

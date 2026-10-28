@@ -5,7 +5,10 @@ import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Problems } from "./components/Problems";
 import { Features } from "./components/Features";
+import { Roles } from "./components/Roles";
 import { Benefits } from "./components/Benefits";
+import { DesignPrinciples } from "./components/DesignPrinciples";
+import { Experience } from "./components/Experience";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
 
@@ -33,7 +36,10 @@ function App() {
       <Hero />
       <Problems />
       <Features />
+      <Roles />
       <Benefits />
+      <DesignPrinciples />
+      <Experience />
       <Contact />
       <Footer />
     </main>

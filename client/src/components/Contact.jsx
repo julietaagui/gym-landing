@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { sendContactForm } from "../api/contactApi";
-import img1 from "../assets/contact.png";
+import img1 from "../assets/contact-tennis.jpg";
 import "./Contact.css";
 
 export function Contact() {
@@ -49,12 +49,27 @@ export function Contact() {
     <section className="contact-section" id="contact">
       <div className="contact-container">
         <div className="contact-left">
-          <img src={img1} alt="Testimonios" className="contact-image" />
+          <img
+            src={img1}
+            alt="Jugador de tenis durante un partido"
+            className="contact-image"
+          />
         </div>
 
         <div className="contact-right">
-          <h2>Cuéntanos más</h2>
-          <p>Déjanos tus datos y nos contactaremos para ofrecerte la mejor solución</p>
+          <div className="contact-heading">
+            <div className="contact-heading-copy">
+              <h2>Cuéntanos más</h2>
+              <p className="contact-subtitle">
+                Déjanos tus datos y nos contactaremos para ofrecerte la mejor
+                solución.
+              </p>
+            </div>
+            <div className="contact-number-lockup" aria-hidden="true">
+              <span className="contact-number">07</span>
+              <span className="contact-eyebrow">Contacto</span>
+            </div>
+          </div>
 
           <form className="contact-form" onSubmit={handleSubmit}>
             <div className="contact-honeypot" aria-hidden="true">
@@ -109,7 +124,7 @@ export function Contact() {
             </div>
 
             <button type="submit" className="btn-submit" disabled={loading}>
-              {loading ? "Enviando..." : "Enviar solicitud"}
+              {loading ? "Enviando..." : "Enviar mensaje"}
             </button>
           </form>
 

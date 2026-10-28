@@ -6,10 +6,11 @@ import metrics from "../assets/metrics.png";
 import exercise from "../assets/exercise.png";
 import userAppointment from "../assets/user-appointment.png";
 import userHome from "../assets/user-home.png";
-import userProfile from "../assets/user-profile.png";
 import userProfile2 from "../assets/user-profile2.png";
 import userPayments from "../assets/user-payments.png";
 import userPayments2 from "../assets/user-payments2.png";
+import tennisBall from "../assets/gymcross-pelota-tenis-loop.gif";
+import jumpRope from "../assets/gymcross-cuerda-saltar-loop.gif";
 
 export function Features() {
   const topTabs = [
@@ -65,7 +66,7 @@ export function Features() {
     {
       id: "profile",
       title: "Perfil de usuario",
-      images: [userProfile, userProfile2],
+      image: userProfile2,
     },
     {
       id: "payments",
@@ -103,19 +104,34 @@ export function Features() {
 
   return (
     <section className="features-section" id="features">
-      <div className="container">
-        <div className="features-container">
-          <h2>Una plataforma diseñada para simplificar la gestión</h2>
-
-          <p className="section-subtitle">
-            GymCross centraliza clientes, entrenamientos, agenda, pagos y
-            métricas en una experiencia rápida, intuitiva y moderna.
-          </p>
+      <div className="features-container">
+          <div className="features-heading">
+            <div className="features-heading-copy">
+              <h2>
+                Todo lo que tu gimnasio<br />necesita, en un solo lugar
+              </h2>
+              <p className="section-subtitle">
+                GymCross centraliza clientes, entrenamientos, agenda, pagos y
+                métricas en una experiencia rápida, intuitiva y moderna.
+              </p>
+            </div>
+            <div className="features-heading-visual" aria-hidden="true">
+              <div className="features-number-lockup">
+                <span className="features-section-number">02</span>
+                <span className="features-section-label">Funcionalidad</span>
+              </div>
+              <img className="features-jump-rope" src={jumpRope} alt="" />
+            </div>
+          </div>
 
           <div className="features-content">
             <div className="features-left">
               <div>
-                <div className="feature-top-tabs">
+                <div className="feature-top-tabs-slot">
+                <div
+                  className="feature-top-tabs"
+                  aria-label="Elegir tipo de cuenta"
+                >
                   {topTabs.map((tab) => (
                     <button
                       key={tab.id}
@@ -123,20 +139,26 @@ export function Features() {
                       className={`feature-top-tab ${
                         selectedTopTab === tab.id ? "active" : ""
                       }`}
+                      aria-pressed={selectedTopTab === tab.id}
                       onClick={() => handleTopTabClick(tab.id)}
                     >
                       {tab.title}
                     </button>
                   ))}
                 </div>
+                </div>
 
-                <div className="features-main-layout">
+                <div
+                  className={`features-main-layout ${
+                    selectedTopTab === "web" ? "features-admin-layout" : ""
+                  } ${selectedTopTab === "mobile" ? "features-user-layout" : ""}`}
+                >
                   <div
                     className={`mockup-placeholder ${
                       selectedTopTab === "mobile" ? "mockup-mobile" : ""
                     } ${
                       activeTab.id === "users" ? "mockup-users" : ""
-                    } ${activeTab.id === "profile" ? "mockup-profile" : ""}`}
+                    } ${activeTab.id === "profile" ? "mockup-profile" : ""} ${activeTab.id === "payments" ? "mockup-payments" : ""}`}
                   >
                     {(activeTab.images ?? [activeTab.image]).map(
                       (image, index) => (
@@ -164,9 +186,16 @@ export function Features() {
                         className={`feature-tab ${
                           index === selectedIndex ? "active" : ""
                         }`}
+                        aria-pressed={index === selectedIndex}
                         onClick={() => handleTabClick(index)}
                       >
-                        {tab.title}
+                        <span className="feature-tab-mascot" aria-hidden="true">
+                          {index === selectedIndex && <img src={tennisBall} alt="" />}
+                        </span>
+                        <span className="feature-tab-number">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <span className="feature-tab-label">{tab.title}</span>
                       </button>
                     ))}
                   </div>
@@ -174,7 +203,6 @@ export function Features() {
               </div>
             </div>
           </div>
-        </div>
       </div>
     </section>
   );

@@ -1,3 +1,5 @@
+import tennisRacket from "../assets/gymcross-raqueta-tenis-loop.gif";
+
 export function Benefits() {
   const benefits = [
     {
@@ -41,7 +43,19 @@ export function Benefits() {
   return (
     <section className="benefits-section" id="benefits">
       <div className="benefits-container">
-        <h2>Beneficios</h2>
+        <div className="benefits-header">
+          <span className="benefits-section-number" aria-hidden="true">
+            <span>0</span>
+            <span>4</span>
+            <span className="benefits-section-label">Beneficios</span>
+          </span>
+          <div className="benefits-heading">
+            <h2>
+              Más claridad para administrar, mejor experiencia para todos.
+            </h2>
+            <img className="benefits-mascot" src={tennisRacket} alt="" />
+          </div>
+        </div>
 
         <div
           className="accordion benefits-accordion"
